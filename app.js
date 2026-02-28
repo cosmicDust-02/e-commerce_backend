@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
-
-const app = express();
 const mongoose = require("mongoose");
 const multer = require("multer");
 const cors = require("cors");
+
+const app = express();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -60,10 +62,9 @@ app.use((req, res, next) => {
 });
 
 // connects the server to the database
-
 mongoose
   .connect(
-    "mongodb+srv://king_abesh:Abesh123@cluster0-g8lvt.mongodb.net/shop?retryWrites=true&w=majority",
+    process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(result => {
