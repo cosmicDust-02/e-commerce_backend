@@ -34,7 +34,7 @@ exports.signUp = (req, res, next) => {
       });
       return user.save();
     })
-    .then(() => res.status(200).send("User registered successfully"))
+    .then(() => res.status(201).send("User registered successfully"))
     .catch(err => console.log(err));
 };
 
