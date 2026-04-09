@@ -34,7 +34,17 @@ exports.signUp = (req, res, next) => {
       });
       return user.save();
     })
-    .then(() => res.status(201).send("User registered successfully"))
+    .then(user => {
+      const token = jwt.sign(
+        { email: user.email, _id: user._id },
+        "somesecretkey",
+        { expiresIn: "1hr" }
+      );
+      res.status(201).send({
+        _id: user._id,
+        token
+      });
+    })
     .catch(err => console.log(err));
 };
 
