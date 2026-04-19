@@ -36,13 +36,13 @@ exports.addToCart = (req, res, next) => {
   const itemId = req.params.id;
   Item.findById(itemId)
     .then(item => {
-      User.findOne({ _id: req._id }).then(user => {
+      return User.findOne({ _id: req._id }).then(user => {
         return user.addToCart(item);
       });
     })
     .then(result => {
       res
-        .status(200)
+        .status(201)
         .send({ success: true, message: "item successfully added to cart" });
     })
     .catch(err => console.log(err));
