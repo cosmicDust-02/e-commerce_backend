@@ -36,7 +36,7 @@ exports.signUp = (req, res, next) => {
     })
     .then(user => {
       const token = jwt.sign(
-        { email: user.email, _id: user._id },
+        { email: user.email, _id: user._id.toString() },
         "somesecretkey",
         { expiresIn: "1hr" }
       );
@@ -73,7 +73,7 @@ exports.logIn = (req, res, next) => {
             );
         }
         const token = jwt.sign(
-          { email: user.email, _id: user._id },
+          { email: user.email, _id: user._id.toString() },
           "somesecretkey",
           { expiresIn: "1hr" }
         );

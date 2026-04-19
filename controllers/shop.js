@@ -95,7 +95,9 @@ exports.addOrder = (req, res, next) => {
       order.save();
       return user.clearCart();
     })
-    .then(res.status(200).send("Successfully placed order"))
+    .then(() => {
+      res.status(201).send({ message: "Successfully placed order" });
+    })
     .catch(err => console.log(err));
 };
 
