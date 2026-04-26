@@ -31,7 +31,10 @@ router.post(
     body("description")
       .isLength({ min: 5, max: 100 })
       .withMessage("Please make sure title is at least five characters")
-      .trim())
+      .trim(),
+    body("image")
+      .isURL()
+      .withMessage("Please provide a valid image URL"))
   ],
   createItem
 );
@@ -66,7 +69,11 @@ router.put(
     body("description")
       .isLength({ min: 5, max: 100 })
       .withMessage("Please make sure title is at least five characters")
-      .trim()
+      .trim(),
+    body("image")
+      .optional()
+      .isURL()
+      .withMessage("Please provide a valid image URL")
   ],
   editItem
 );

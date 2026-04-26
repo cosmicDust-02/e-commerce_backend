@@ -31,7 +31,7 @@ router.get("/items/:id", isAuth, getItem);
  * @method get
  * @api public
  */
-router.get("/cart", getCart);
+router.get("/cart", isAuth, getCart);
 
 /**
  * @desc adds an item to a cart

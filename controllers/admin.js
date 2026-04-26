@@ -1,6 +1,5 @@
 const Item = require("../models/items");
 const { validationResult } = require("express-validator");
-const fileCleanup = require("../utils/file");
 /**
  * @param {req} http request from client
  * @param {req} http response to client
@@ -14,12 +13,13 @@ exports.createItem = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
-  const image = req.file;
+  const image = req.body.image;
   const errors = validationResult(req);
+  
   if (!image) {
-    return res.status(422).send({ errors: "attached file is not an image" });
+    return res.status(422).send({ errors: "image URL is required" });
   }
-  const imageUrl = image.path;
+  
   if (!errors.isEmpty()) {
     return res.status(422).send({ errors: errors.array() });
   }
@@ -28,9 +28,10 @@ exports.createItem = (req, res, next) => {
     title,
     price,
     description,
-    image: imageUrl,
+    image: image,
     userId: req._id
   });
+  
   item
     .save()
     .then(result => {
@@ -53,7 +54,7 @@ exports.editItem = (req, res, next) => {
   const id = req.params.id;
   const title = req.body.title;
   const price = req.body.price;
-  const image = req.file;
+  const image = req.body.image;
   const description = req.body.description;
   const errors = validationResult(req);
 
@@ -74,8 +75,7 @@ exports.editItem = (req, res, next) => {
       item.title = title;
       item.price = price;
       if (image) {
-        fileCleanup.deleteFile(item.image);
-        item.image = image.path;
+        item.image = image;
       }
       item.description = description;
       item.save().then(() => {
@@ -99,7 +99,6 @@ exports.deleteItem = (req, res, next) => {
           .status(403)
           .send({ success: "false", message: "Not authorized" });
       }
-      fileCleanup.deleteFile(item.image);
       return Item.findByIdAndRemove(id).then(() =>
         res.status(200).send("Successfully deleted item")
       );

@@ -55,7 +55,7 @@ exports.logIn = (req, res, next) => {
   const password = req.body.password;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(422).json({ errors: errors.array(), msg: "invalid credentials" });
   }
   User.findOne({ email })
     .then(user => {
